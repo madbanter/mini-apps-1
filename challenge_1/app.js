@@ -40,12 +40,8 @@ var buildBoardTableView = (board) => {
       let noText = document.createTextNode(' # ');
       td.appendChild(noText);
       td.setAttribute('id', `${row}-${column}`);
-      // td.setAttribute('onclick', 'console.log(this.id);');
-      td.setAttribute('style', 'background-color: yellow');
+      // td.setAttribute('style', 'background-color: yellow');
       trow.appendChild(td);
-      // td.addEventListener('click', function() {
-      //   console.log('clicked!', this.id);
-      // });
     }
     boardView.appendChild(trow);
   }
@@ -67,13 +63,19 @@ console.log(boardTableView);
 //-----Controller-----
 
 var updateBoard = (coordinates, board) => {
+  if (gameOver) {
+    throw 'Game has ended. Start a new game to continue.';
+    return null;
+  }
   [row, column] = coordinates;
   console.log(row, column, board);
   if (board[row][column].length !== 0) {
-    throw "Error: Illegal move. Square already occupied."
+    throw "Error: Illegal move. Square already occupied.";
   } else {
     board[row][column] = turn;
     // update boardtableview
+    let square = document.getElementById(coordinates.join('-'));
+    square.textContent = turn;
     let win = winCheck(board);
     // Handle win
     if (win) {
