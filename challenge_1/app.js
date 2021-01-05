@@ -5,14 +5,13 @@ var turns = 1;
 var turn = pieces[turns % 2];
 var turnMessage = `It is ${turn}'s turn.`;
 var gameOver = false;
+var empty;
+var emptySquare = ' # ';
 
 var buildBoard = (size) => {
   var board = []
   for (let rows = 0; rows < size; rows++) {
     let row = [];
-    for (let columns = 0; columns < size; columns++) {
-      row.push([]);
-    }
     board.push(row);
   }
   return board;
@@ -21,11 +20,52 @@ var buildBoard = (size) => {
 var board = buildBoard(3);
 
 var winCheck = (board) => {
+  for (row of board) {
+    if (matchCheck(...row)) {
+      return row[0];
+    }
+  }
+  for (let colNum = 0; colNum < board.length; colNum++) {
+    let col = [];
+    for (row of board) {
+      col.push(row[colNum]);
+    }
+    if (matchCheck(...col)) {
+      return col[0];
+    }
+  }
 
+  let squares = [];
+  for (let i = 0; i < board.length; i++) {
+    squares.push(board[i][i]);
+  }
+  if (matchCheck(...squares)) {
+    return squares[0];
+  }
+
+  for (let i = 0; i < board.length; i++) {
+    squares.push(board[i][board.length - i]);
+  }
+  if (matchCheck(...squares)) {
+    return squares[0];
+  }
+  return false;
 };
 
 var tieCheck = (turns, board) => {
   return turns === Math.pow(board.length, 2);
+};
+
+var matchCheck = function() {
+  if (arguments.length !== board.length) {
+    return false;
+  }
+  for (arg of arguments) {
+    if (!arg || arg !== arguments[0]) {
+      return false;
+    }
+  }
+  return true;
 };
 
 //-----View-----------
@@ -35,29 +75,35 @@ var buildBoardTableView = (board) => {
   for (let row = 0; row < board.length; row++) {
     let trow = document.createElement('tr');
     trow.setAttribute('id', `row${row}`);
-    for (let column = 0; column < board[row].length; column++) {
+    for (let column = 0; column < board.length; column++) {
       let td = document.createElement('td')
-      let noText = document.createTextNode(' # ');
+      let noText = document.createTextNode(emptySquare);
       td.appendChild(noText);
       td.setAttribute('id', `${row}-${column}`);
-      // td.setAttribute('style', 'background-color: yellow');
       trow.appendChild(td);
     }
     boardView.appendChild(trow);
   }
   document.body.appendChild(boardView);
-  boardView.addEventListener('click', function(event) {
-    let vals = event.target.id.split('-').map(val => parseInt(val));
-    updateBoard(vals, board);
-  });
   return boardView;
 }
 
 var boardTableView = buildBoardTableView(board);
 
-console.log(boardTableView);
+var newGameButton = document.createElement('button');
+let buttonText = document.createTextNode('NEW GAME');
+newGameButton.appendChild(buttonText);
+newGameButton.setAttribute('style', 'background-color: red');
+document.body.append(newGameButton);
 
 
+document.addEventListener('DOMContentLoaded', (event) => {
+  newGameButton.addEventListener('click', newGame);
+  boardTableView.addEventListener('click', function(event) {
+    let vals = event.target.id.split('-').map(val => parseInt(val));
+    updateBoard(vals, board);
+  });
+});
 
 
 //-----Controller-----
@@ -68,8 +114,8 @@ var updateBoard = (coordinates, board) => {
     return null;
   }
   [row, column] = coordinates;
-  console.log(row, column, board);
-  if (board[row][column].length !== 0) {
+
+  if (board[row][column] !== empty) {
     throw "Error: Illegal move. Square already occupied.";
   } else {
     board[row][column] = turn;
@@ -77,7 +123,6 @@ var updateBoard = (coordinates, board) => {
     let square = document.getElementById(coordinates.join('-'));
     square.textContent = turn;
     let win = winCheck(board);
-    // Handle win
     if (win) {
       let winMessage = `${turn} wins!`
       console.log(winMessage);
@@ -85,7 +130,6 @@ var updateBoard = (coordinates, board) => {
       return turn;
     } else {
       let tie = tieCheck(turns, board);
-      // Handle tie
       if (tie) {
         let tieMessage = 'Tie game. Game Over.';
         console.log(tieMessage);
@@ -103,24 +147,29 @@ var updateTurn = (turns) => {
   return pieces[turns % 2];
 };
 
-// On click:
-// Check if square has been clicked before
-//  If so, display error message
-// set value of array[row][column] to turn
-// update td with id row-column to turn
-// check for win
-// check for tie
-// update turn
+var resetBoardView = () => {
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board.length; col++) {
+      let square = document.getElementById(`${row}-${col}`);
+      square.textContent = emptySquare;
+    }
+  }
+};
 
-// On win:
-//  Display win message for player
-//  No more turns
+var newGame = () => {
+  board = buildBoard(3);
+  turns = 1;
+  turn = pieces[turns % 2];
+  turnMessage = `It is ${turn}'s turn.`;
+  gameOver = false;
+  resetBoardView();
+};
 
-// On tie:
-//  Display tie messages
-//  No more turns
-
-// On new game:
-//  Reset turn and turns
-//  Reset board to blank board with buildBoard
-//  Reset boardView with buildBoardTableView
+/*
+  TODO:
+  Styling (centering, size, board visibility, handling empty squares, style, etc.)
+  Add scoreboard
+  Add player names
+  Refactor to classes
+  Refactor to use divs instead of table
+*/
