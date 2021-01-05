@@ -1,9 +1,10 @@
 //-----Model----------
 
 var pieces = ['O', 'X'];
-var turnNum = 1;
-var turn = pieces[turnNum % 2];
+var turns = 1;
+var turn = pieces[turns % 2];
 var turnMessage = `It is ${turn}'s turn.`;
+var gameOver = false;
 
 var buildBoard = (size) => {
   var board = []
@@ -19,6 +20,14 @@ var buildBoard = (size) => {
 
 var board = buildBoard(3);
 
+var winCheck = (board) => {
+
+};
+
+var tieCheck = (turns, board) => {
+  return turns === Math.pow(board.length, 2);
+};
+
 //-----View-----------
 
 var buildBoardTableView = (board) => {
@@ -28,14 +37,23 @@ var buildBoardTableView = (board) => {
     trow.setAttribute('id', `row${row}`);
     for (let column = 0; column < board[row].length; column++) {
       let td = document.createElement('td')
-      // let sampleText = document.createTextNode(turn);
-      // td.appendChild(sampleText);
+      let noText = document.createTextNode(' # ');
+      td.appendChild(noText);
       td.setAttribute('id', `${row}-${column}`);
+      // td.setAttribute('onclick', 'console.log(this.id);');
+      td.setAttribute('style', 'background-color: yellow');
       trow.appendChild(td);
+      // td.addEventListener('click', function() {
+      //   console.log('clicked!', this.id);
+      // });
     }
     boardView.appendChild(trow);
   }
   document.body.appendChild(boardView);
+  boardView.addEventListener('click', function(event) {
+    let vals = event.target.id.split('-').map(val => parseInt(val));
+    updateBoard(vals, board);
+  });
   return boardView;
 }
 
@@ -44,33 +62,44 @@ var boardTableView = buildBoardTableView(board);
 console.log(boardTableView);
 
 
-/*
-  <table>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-  </table>
-*/
-
-
-
-
-
 
 
 //-----Controller-----
+
+var updateBoard = (coordinates, board) => {
+  [row, column] = coordinates;
+  console.log(row, column, board);
+  if (board[row][column].length !== 0) {
+    throw "Error: Illegal move. Square already occupied."
+  } else {
+    board[row][column] = turn;
+    // update boardtableview
+    let win = winCheck(board);
+    // Handle win
+    if (win) {
+      let winMessage = `${turn} wins!`
+      console.log(winMessage);
+      gameOver = true;
+      return turn;
+    } else {
+      let tie = tieCheck(turns, board);
+      // Handle tie
+      if (tie) {
+        let tieMessage = 'Tie game. Game Over.';
+        console.log(tieMessage);
+        gameOver = true;
+        return null;
+      }
+    }
+    turns++;
+    turn = updateTurn(turns);
+    console.log(`It is ${turn}'s turn.`);
+  }
+};
+
+var updateTurn = (turns) => {
+  return pieces[turns % 2];
+};
 
 // On click:
 // Check if square has been clicked before
@@ -90,6 +119,6 @@ console.log(boardTableView);
 //  No more turns
 
 // On new game:
-//  Reset turn and turnNum
+//  Reset turn and turns
 //  Reset board to blank board with buildBoard
 //  Reset boardView with buildBoardTableView
