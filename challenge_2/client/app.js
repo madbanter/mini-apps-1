@@ -30,7 +30,18 @@ app.append(form);
 
 $('form').on('submit', function(e) {
   let fieldData = $('textarea[name=textInput]').val();
-  console.log(fieldData);
-  $.ajax({method: 'POST', url: '/upload_json', data: {text: fieldData}});
+  if (fieldData) {
+    $.ajax({
+      method: 'POST',
+      url: '/upload_json',
+      data: {payload: fieldData},
+      success: (data) => {
+        console.log(data);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
   e.preventDefault();
 });

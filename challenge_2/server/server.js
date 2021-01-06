@@ -8,6 +8,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var port = 3000;
+var createReport = require('./createReport');
 
 app.use(express.static('client'));
 app.use(bodyParser.json());
@@ -15,8 +16,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.raw());
 
 app.post('/upload_json', (req, res) => {
-  console.log(res);
-  res.status(201).send('Upload received.');
+  // console.log(req.body.payload);
+  var report = createReport(req.body.payload);
+  // console.log(report);
+  res.status(201).send(report);
 });
 
 app.listen(port, () => {
