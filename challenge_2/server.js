@@ -6,7 +6,7 @@ You may also assume that child records in the JSON will always be in a property 
 
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 var port = 3000;
 
 app.use(express.static('client'));
@@ -21,4 +21,4 @@ app.post('/upload_json', (req, res) => {
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
-})
+});
