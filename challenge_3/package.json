@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "npx babel . --out-dir compiled --presets=@babel/preset-react --ignore=node_modules,compiled --source-maps inline",
-    "watch": "npx babel . --out-dir compiled --presets=@babel/preset-react --ignore=node_modules,compiled --source-maps inline --watch"
+    "build": "npx babel . --out-dir public --presets=@babel/preset-react --ignore=node_modules,compiled --source-maps inline",
+    "watch": "npx babel . --out-dir public --presets=@babel/preset-react --ignore=node_modules,compiled --source-maps inline --watch"
   },
   "author": "Adam Brent",
   "license": "ISC",
