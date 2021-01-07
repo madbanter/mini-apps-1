@@ -1,6 +1,6 @@
 import React from 'react';
-import Board from 'Board.jsx';
-import Banner from 'Banner.jsx';
+import Board from './Board.jsx';
+import Banner from './Banner.jsx';
 
 
 class App extends React.Component {
