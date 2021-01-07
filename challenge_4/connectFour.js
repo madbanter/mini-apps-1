@@ -1,9 +1,9 @@
 var game = {
-  board: buildBoard();
-  players: ['red', 'black'];
-  turnNumber: 1;
-  turn: players[turnNumber % 2];
-  gameOver: false;
+  board: buildBoard(),
+  players: ['red', 'black'],
+  turnNumber: 1,
+  turn: players[turnNumber % 2],
+  gameOver: false
 }
 
 var buildBoard = (rows = 6, columns = 7) => {
