@@ -73,19 +73,19 @@ var winCheck = (row, column) => {
     if (consecutive === 4) {
       return `Four in a row! Vertical. ${game.turn} wins!`;
     }
-  } else {
-    for (let checkColumn = Math.max(column - 3, 0); checkColumn < Math.min(column + 3, game.board[0].length); checkColumn++) {  // Can be more specific about not checking if there are not enough remaining slots for a win
-      if (game.board[row][checkColumn] === game.turn) {
-        consecutive++;
-        if (consecutive === 4) {
-          return `Four in a row! Horizontal. ${game.turn} wins!`;
-        }
-      } else {
-        consecutive = 0;
-      }
-    }
-    // Check the diagonal!
   }
+  consecutive = 0;
+  for (let checkColumn = Math.max(column - 3, 0); checkColumn < Math.min(column + 3, game.board[0].length); checkColumn++) {  // Can be more specific about not checking if there are not enough remaining slots for a win
+    if (game.board[row][checkColumn] === game.turn) {
+      consecutive++;
+      if (consecutive === 4) {
+        return `Four in a row! Horizontal. ${game.turn} wins!`;
+      }
+    } else {
+      consecutive = 0;
+    }
+  }
+    // Check the diagonal!
     // if found, turn wins, return `${turn} wins!` [highlight win??]
   // Otherwise return false
   return false;
