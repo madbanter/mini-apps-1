@@ -12,13 +12,15 @@ class App extends React.Component {
     };
   }
 
-  componentDidMount();
+  componentDidMount() {}
 
-  getBoard();
+  getBoard() {}
 
-  placePiece();
+  newGame() {}
 
-  displayMessage();
+  placePiece() {}
+
+  displayMessage() {}
 
   render() {
     return (
