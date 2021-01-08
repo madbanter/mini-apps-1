@@ -28,7 +28,7 @@ var placePiece = (column) => {
   for (let row = game.board.length - 1; row >= 0; row--) {
     if (!game.board[row][column]) {
       game.board[row][column] = game.turn;
-      game.gameOver = endCheck();
+      game.gameOver = endCheck(row, column);
       if (!game.gameOver) {
         updateTurn();
         return `'It's now ${game.turn}'s turn.`;
@@ -40,16 +40,16 @@ var placePiece = (column) => {
   return `Error: Illegal move, column is full. Try again, ${game.turn}.`;
 };
 
-var endCheck = () => {
+var endCheck = (row, column) => {
   var tie = tieCheck();
   if (tie) {
     return tie;
   } else {
-    return winCheck();
+    return winCheck(row, column);
   }
 };
 
-var winCheck = () => {
+var winCheck = (row, column) => {
   // Iterate over submatrix (max size 9) containing latest move (row, column)
   // Check for four consecutive squares of color {turn}
   // for (let checkRow = Math.max(row - 3, 0); checkRow < Math.min(row + 3, game.board.length); checkRow++) {
