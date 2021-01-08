@@ -13,9 +13,9 @@ var buildBoard = (rows = 6, columns = 7) => {
 var game = {
   boardSize: 42,
   board: buildBoard(),
-  players: ['red', 'black'],
+  players: ['R', 'B'],
   turns: 1,
-  turn: 'black',
+  turn: 'B',
   gameOver: false
 }
 
@@ -28,7 +28,6 @@ var placePiece = (column) => {
   if (game.gameOver) {
     return `Error: Game has ended. Start a new game.`;
   }
-  console.log(`${game.turn}'s turn.`)
   for (let row = game.board.length - 1; row >= 0; row--) {
     if (!game.board[row][column]) {
       game.board[row][column] = game.turn;
@@ -57,7 +56,7 @@ var winCheck = (row, column) => {
   // Iterate over submatrix (max size 9) containing latest move (row, column)
   // Check for four consecutive squares of color {turn}
   // for (let checkRow = Math.max(row - 3, 0); checkRow < Math.min(row + 3, game.board.length); checkRow++) {
-  if (game.turns < 6) {  // Can be more specific based on who goes first...
+  if (game.turns < 7) {  // Can be more specific based on who goes first...
     return false;
   }
   let consecutive = 1;
@@ -87,14 +86,14 @@ var winCheck = (row, column) => {
   }
   consecutive = 0;
   // Check the diagonal!
-  if ((row - column) =< 3 && (column - row) < 3) {
+  if ((row - column) <= 3 && (column - row) < 3) {
     let startOffset = Math.min(Math.min(row, column), 3);
     let startRow = row - startOffset;
     let startColumn = column - startOffset;
     let endRow = Math.min(row + 3, game.board.length - 1);
     let endColumn = Math.min(column + 3, game.board[0].length - 1);
-    for (let checkRow = startRow, checkColumn = startColumn; checkRow < endRow, checkColumn < endColumn; checkRow++, checkColumn++) {
-      if (game.board[checkRow][checkColumn] == game.turn) {
+    for (let checkRow = startRow, checkColumn = startColumn; (checkRow <= endRow) && (checkColumn <= endColumn); checkRow++, checkColumn++) {
+      if (game.board[checkRow][checkColumn] === game.turn) {
         consecutive++;
         if (consecutive === 4) {
           return `Four in a row! Diagonal lower right. ${game.turn} wins!`;
