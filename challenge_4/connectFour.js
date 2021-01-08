@@ -67,14 +67,14 @@ var winCheck = (row, column) => {
       }
     }
     if (consecutive === 4) {
-      return `Four in a row! ${turn} wins!`;
+      return `Four in a row! ${game.turn} wins!`;
     }
   } else {
     for (let checkColumn = Math.max(column - 3, 0); checkColumn < Math.min(column + 3, game.board[0].length); checkColumn++) {  // Can be more specific about not checking if there are not enough remaining slots for a win
       if (game.board[row][checkColumn] === game.turn) {
         consecutive++;
         if (consecutive === 4) {
-          return `Four in a row! ${turn} wins!`;
+          return `Four in a row! ${game.turn} wins!`;
         }
       } else {
         consecutive = 0;
