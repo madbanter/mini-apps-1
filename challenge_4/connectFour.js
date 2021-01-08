@@ -85,7 +85,25 @@ var winCheck = (row, column) => {
       consecutive = 0;
     }
   }
-    // Check the diagonal!
+  consecutive = 0;
+  // Check the diagonal!
+  if ((row - column) =< 3 && (column - row) < 3) {
+    let startOffset = Math.min(Math.min(row, column), 3);
+    let startRow = row - startOffset;
+    let startColumn = column - startOffset;
+    let endRow = Math.min(row + 3, game.board.length - 1);
+    let endColumn = Math.min(column + 3, game.board[0].length - 1);
+    for (let checkRow = startRow, checkColumn = startColumn; checkRow < endRow, checkColumn < endColumn; checkRow++, checkColumn++) {
+      if (game.board[checkRow][checkColumn] == game.turn) {
+        consecutive++;
+        if (consecutive === 4) {
+          return `Four in a row! Diagonal lower right. ${game.turn} wins!`;
+        }
+      } else {
+        consecutive = 0;
+      }
+    }
+  }
     // if found, turn wins, return `${turn} wins!` [highlight win??]
   // Otherwise return false
   return false;
