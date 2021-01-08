@@ -12,6 +12,14 @@ class App extends React.Component {
     };
   }
 
+  componentDidMount();
+
+  getBoard();
+
+  placePiece();
+
+  displayMessage();
+
   render() {
     return (
       <div>
