@@ -20,8 +20,8 @@ var game = {
 }
 
 updateTurn = () => {
-  game.turn++;
-  game.turn = game.players[game.turn % 2];
+  game.turns++;
+  game.turn = game.players[game.turns % 2];
 };
 
 var placePiece = (column) => {
